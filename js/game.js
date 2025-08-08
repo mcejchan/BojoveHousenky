@@ -58,6 +58,7 @@ function checkRoundEnd() {
         
         if (bluePlayer.lives <= 0) {
             endGame('ČERVENÝ VYHRÁL CELOU HRU!', '#ff4444');
+            return;
         }
     } else if (redPlayer.health <= 0 && roundWinner === null) {
         redPlayer.lives--;
@@ -66,22 +67,23 @@ function checkRoundEnd() {
         
         if (redPlayer.lives <= 0) {
             endGame('MODRÝ VYHRÁL CELOU HRU!', '#00d4ff');
+            return;
         }
     }
     
-    // Respawn po pauze
+    // Respawn po pauze - pouze pokud hra pokračuje
     if (respawnDelay === 1 && roundWinner !== null) {
-        if (bluePlayer.lives > 0 && redPlayer.lives > 0) {
-            // Oba hráči mají ještě životy - respawn pro nové kolo
-            bluePlayer.respawn();
-            redPlayer.respawn();
-            roundWinner = null;
-            roundNumber++;
-            
-            // Efekt pro nové kolo
-            for (let i = 0; i < 20; i++) {
-                particles.push(new Particle(canvas.width / 2, canvas.height / 2, 'white'));
-            }
+        // Zvýšit číslo kola před respawnem
+        roundNumber++;
+        
+        // Respawnuj oba hráče na začátek nového kola
+        bluePlayer.respawn();
+        redPlayer.respawn();
+        roundWinner = null;
+        
+        // Efekt pro nové kolo
+        for (let i = 0; i < 20; i++) {
+            particles.push(new Particle(canvas.width / 2, canvas.height / 2, 'white'));
         }
     }
 }
@@ -166,7 +168,7 @@ function gameLoop() {
         ctx.fillText(`${winnerName} VYHRÁL KOLO!`, canvas.width / 2, canvas.height / 2);
         
         ctx.font = '24px Arial';
-        ctx.fillText(`Kolo ${roundNumber + 1} začíná...`, canvas.width / 2, canvas.height / 2 + 50);
+        ctx.fillText(`Kolo ${roundNumber} začíná...`, canvas.width / 2, canvas.height / 2 + 50);
         ctx.restore();
     }
     
