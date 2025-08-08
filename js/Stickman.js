@@ -56,7 +56,7 @@ class Stickman {
             part.vy = 0;
         });
         
-        // Reset stavu
+        // Reset stavu (ale neobnovujeme lives - ty se snižují pouze při prohře kola)
         this.health = this.maxHealth;
         this.stunned = 0;
         this.attackCooldown = 0;

@@ -72,6 +72,7 @@ function checkRoundEnd() {
     // Respawn po pauze
     if (respawnDelay === 1 && roundWinner !== null) {
         if (bluePlayer.lives > 0 && redPlayer.lives > 0) {
+            // Oba hráči mají ještě životy - respawn pro nové kolo
             bluePlayer.respawn();
             redPlayer.respawn();
             roundWinner = null;
