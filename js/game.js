@@ -14,7 +14,7 @@ let meteorites = [];
 let roundNumber = 1;
 let roundWinner = null;
 let respawnDelay = 0;
-let nextMeteoriteTime = 1800; // 30 sekund
+let nextMeteoriteTime = 1800 + Math.random() * 600; // 30-40 sekund náhodně
 
 // Vytvoření hráčů
 const bluePlayer = new Stickman(200, 400, '#00d4ff', 'MODRÝ');
@@ -128,7 +128,7 @@ function gameLoop() {
         const x = Math.random() * canvas.width;
         const y = -50;
         meteorites.push(new Meteorite(x, y));
-        nextMeteoriteTime = 1800; // 30 sekund
+        nextMeteoriteTime = 1800 + Math.random() * 600; // 30-40 sekund náhodně
     }
     
     // Aktualizace meteoritů
