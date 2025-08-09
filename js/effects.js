@@ -19,7 +19,7 @@ function createLightningEffect(x1, y1, x2, y2) {
 
 // Načtení obrázku pozadí
 const backgroundImage = new Image();
-backgroundImage.src = 'background.png';
+backgroundImage.src = 'background.jpg';
 
 // Kreslení pozadí
 function drawBackground() {
