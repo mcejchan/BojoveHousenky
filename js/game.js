@@ -46,11 +46,29 @@ function updateUI() {
 
 // Kontrola konce kola
 function checkRoundEnd() {
+    // Odpočítávání pauzy a respawn po jejím skončení
     if (respawnDelay > 0) {
         respawnDelay--;
-        return;
+        
+        // Po skončení pauzy provést respawn
+        if (respawnDelay === 0 && roundWinner !== null) {
+            // Zvýšit číslo kola před respawnem
+            roundNumber++;
+            
+            // Respawnuj oba hráče na začátek nového kola
+            bluePlayer.respawn();
+            redPlayer.respawn();
+            roundWinner = null;
+            
+            // Efekt pro nové kolo
+            for (let i = 0; i < 20; i++) {
+                particles.push(new Particle(canvas.width / 2, canvas.height / 2, 'white'));
+            }
+        }
+        return; // Během pauzy nekontrolujeme úmrtí
     }
     
+    // Kontrola úmrtí - pouze když není pauza
     if (bluePlayer.health <= 0 && roundWinner === null) {
         bluePlayer.lives--;
         roundWinner = 'red';
@@ -68,22 +86,6 @@ function checkRoundEnd() {
         if (redPlayer.lives <= 0) {
             endGame('MODRÝ VYHRÁL CELOU HRU!', '#00d4ff');
             return;
-        }
-    }
-    
-    // Respawn po pauze - pouze pokud hra pokračuje
-    if (respawnDelay === 1 && roundWinner !== null) {
-        // Zvýšit číslo kola před respawnem
-        roundNumber++;
-        
-        // Respawnuj oba hráče na začátek nového kola
-        bluePlayer.respawn();
-        redPlayer.respawn();
-        roundWinner = null;
-        
-        // Efekt pro nové kolo
-        for (let i = 0; i < 20; i++) {
-            particles.push(new Particle(canvas.width / 2, canvas.height / 2, 'white'));
         }
     }
 }
