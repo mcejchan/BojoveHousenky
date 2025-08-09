@@ -10,9 +10,11 @@ canvas.height = 600;
 let gameRunning = true;
 let particles = [];
 let lightningEffects = [];
+let meteorites = [];
 let roundNumber = 1;
 let roundWinner = null;
 let respawnDelay = 0;
+let nextMeteoriteTime = Math.random() * 300 + 600; // 10-25 sekund
 
 // Vytvoření hráčů
 const bluePlayer = new Stickman(200, 400, '#00d4ff', 'MODRÝ');
@@ -119,6 +121,22 @@ function gameLoop() {
     // Aktualizace hráčů
     bluePlayer.update();
     redPlayer.update();
+    
+    // Meteorit spawn
+    nextMeteoriteTime--;
+    if (nextMeteoriteTime <= 0) {
+        const x = Math.random() * canvas.width;
+        const y = -50;
+        meteorites.push(new Meteorite(x, y));
+        nextMeteoriteTime = Math.random() * 600 + 300; // 5-25 sekund
+    }
+    
+    // Aktualizace meteoritů
+    meteorites.forEach(meteorite => meteorite.update());
+    meteorites = meteorites.filter(meteorite => !meteorite.isFinished());
+    
+    // Kreslení meteoritů
+    meteorites.forEach(meteorite => meteorite.draw());
     
     // Kreslení hráčů
     bluePlayer.draw();
