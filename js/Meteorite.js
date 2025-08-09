@@ -57,15 +57,16 @@ class Meteorite {
         
         if (distance < this.size + player.torso.radius) {
             this.explode();
-            // Poškození hráče
-            player.health -= 25;
+            // Okamžitá smrt - odebrání všech životů
+            player.lives = 0;
+            player.health = 0;
             player.stunned = 30;
             
-            // Knockback
-            const knockbackPower = 15;
+            // Silný knockback
+            const knockbackPower = 25;
             player.parts.forEach(part => {
                 part.vx += (part.x - this.x) / distance * knockbackPower;
-                part.vy += (part.y - this.y) / distance * knockbackPower - 8;
+                part.vy += (part.y - this.y) / distance * knockbackPower - 15;
             });
         }
     }
