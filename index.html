@@ -137,17 +137,19 @@
 
         #controls {
             position: fixed;
-            bottom: 10px;
+            top: 50%;
             right: 10px;
+            transform: translateY(-50%);
             background: rgba(0,0,0,0.8);
             color: white;
-            padding: 15px 25px;
+            padding: 15px 20px;
             border-radius: 15px;
             text-align: center;
-            font-size: 14px;
+            font-size: 13px;
             z-index: 1000;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             border: 2px solid rgba(255,255,255,0.2);
+            line-height: 1.4;
         }
 
         .lightning {
@@ -227,7 +229,17 @@
         </div>
 
         <div id="controls">
-            <strong>Ovládání:</strong> A/D - Modrý pohyb | W - Modrý skok | S - Modrý útok | ←/→ - Červený pohyb | ↑ - Červený skok | ↓ - Červený útok
+            <strong>Ovládání:</strong><br>
+            <div style="text-align: left;">
+                <strong>Modrý hráč:</strong><br>
+                A/D - pohyb<br>
+                W - skok<br>
+                S - útok<br><br>
+                <strong>Červený hráč:</strong><br>
+                ←/→ - pohyb<br>
+                ↑ - skok<br>
+                ↓ - útok
+            </div>
         </div>
 
         <div id="mobileControls">
