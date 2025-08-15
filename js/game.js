@@ -16,9 +16,28 @@ let roundWinner = null;
 let respawnDelay = 0;
 let nextMeteoriteTime = 1800 + Math.random() * 600; // 30-40 sekund náhodně
 
+// Zbraňový systém
+const availableWeapons = ['staff', 'fire', 'ice', 'boomerang', 'crossbow'];
+let currentWeapon = 'staff';
+let fireballs = [];
+let boomerangs = [];
+let arrows = [];
+
 // Vytvoření hráčů
 const bluePlayer = new Stickman(200, 400, '#00d4ff', 'MODRÝ');
 const redPlayer = new Stickman(800, 400, '#ff4444', 'ČERVENÝ');
+
+// Funkce pro výběr zbraně při startu kola
+function chooseWeaponForRound() {
+    currentWeapon = availableWeapons[Math.floor(Math.random() * availableWeapons.length)];
+    bluePlayer.setWeapon(currentWeapon);
+    redPlayer.setWeapon(currentWeapon);
+    
+    // Vyčištění projektilů při změně zbraně
+    fireballs = [];
+    boomerangs = [];
+    arrows = [];
+}
 
 // Aktualizace UI
 function updateUI() {
@@ -61,6 +80,9 @@ function checkRoundEnd() {
             bluePlayer.respawn();
             redPlayer.respawn();
             roundWinner = null;
+            
+            // Zvolení nové zbraně pro kolo
+            chooseWeaponForRound();
             
             // Efekt pro nové kolo
             for (let i = 0; i < 20; i++) {
@@ -135,8 +157,23 @@ function gameLoop() {
     meteorites.forEach(meteorite => meteorite.update());
     meteorites = meteorites.filter(meteorite => !meteorite.isFinished());
     
+    // Aktualizace projektilů
+    fireballs.forEach(fb => fb.update());
+    boomerangs.forEach(b => b.update());
+    arrows.forEach(a => a.update());
+    
+    // Filtrujeme dokončené projektily
+    fireballs = fireballs.filter(fb => !fb.isFinished());
+    boomerangs = boomerangs.filter(b => !b.isFinished());
+    arrows = arrows.filter(a => !a.isFinished());
+    
     // Kreslení meteoritů
     meteorites.forEach(meteorite => meteorite.draw());
+    
+    // Kreslení projektilů
+    fireballs.forEach(fb => fb.draw());
+    boomerangs.forEach(b => b.draw());
+    arrows.forEach(a => a.draw());
     
     // Kreslení hráčů
     bluePlayer.draw();
@@ -192,12 +229,23 @@ function gameLoop() {
         ctx.restore();
     }
     
-    // Zobrazení čísla kola
+    // Zobrazení čísla kola a aktuální zbraně
     ctx.save();
     ctx.fillStyle = 'rgba(255,255,255,0.8)';
     ctx.font = 'bold 20px Arial';
     ctx.textAlign = 'center';
     ctx.fillText(`KOLO ${roundNumber}`, canvas.width / 2, 40);
+    
+    // Zobrazení názvu zbraně
+    const weaponNames = {
+        'staff': 'BLESKOVÁ HŮL',
+        'fire': 'OHNIVÁ HŮL', 
+        'ice': 'LEDOVÉ KOPÍ',
+        'boomerang': 'BUMERANG',
+        'crossbow': 'KUŠE'
+    };
+    ctx.font = '16px Arial';
+    ctx.fillText(weaponNames[currentWeapon] || currentWeapon.toUpperCase(), canvas.width / 2, 65);
     ctx.restore();
     
     // Aktualizace UI
@@ -213,5 +261,6 @@ function gameLoop() {
 // Inicializace a spuštění hry
 function initGame() {
     setupMobileControls();
+    chooseWeaponForRound(); // Nastav zbraň pro první kolo
     gameLoop();
 }
