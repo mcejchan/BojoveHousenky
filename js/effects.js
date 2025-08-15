@@ -17,15 +17,34 @@ function createLightningEffect(x1, y1, x2, y2) {
     }
 }
 
-// Načtení obrázku pozadí
-const backgroundImage = new Image();
-backgroundImage.src = 'background.jpg';
+// Načtení obrázků pozadí
+const backgroundImages = [];
+const backgroundSources = ['background1.jpg', 'background2.jpg', 'background3.jpg'];
+
+// Načtení všech obrázků pozadí
+backgroundSources.forEach((src, index) => {
+    const img = new Image();
+    img.src = src;
+    backgroundImages[index] = img;
+});
+
+// Fallback na původní obrázek, pokud nové neexistují
+const fallbackImage = new Image();
+fallbackImage.src = 'background.jpg';
 
 // Kreslení pozadí
 function drawBackground() {
-    // Pokud je obrázek načten, použij ho jako pozadí
-    if (backgroundImage.complete && backgroundImage.naturalWidth > 0) {
-        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+    // Výběr pozadí podle čísla kola (cyklicky pro 3 obrázky)
+    const backgroundIndex = (roundNumber - 1) % 3;
+    const currentBackground = backgroundImages[backgroundIndex];
+    
+    // Pokud je aktuální obrázek načten, použij ho
+    if (currentBackground && currentBackground.complete && currentBackground.naturalWidth > 0) {
+        ctx.drawImage(currentBackground, 0, 0, canvas.width, canvas.height);
+    } 
+    // Fallback na původní obrázek
+    else if (fallbackImage.complete && fallbackImage.naturalWidth > 0) {
+        ctx.drawImage(fallbackImage, 0, 0, canvas.width, canvas.height);
     } else {
         // Fallback na původní pozadí, pokud se obrázek nenačte
         // Nebe
